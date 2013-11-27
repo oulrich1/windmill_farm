@@ -33,6 +33,7 @@ public:
     bool    controlDirection(vec4); // control the stick in certain direction...
 
     bool    resetOrientation(vec4 up = vec4(0,1,0,0));
+    bool    collided();
 
     /* - - - - data  - - - - */
 

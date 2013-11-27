@@ -107,7 +107,7 @@ bool Plane::controlDirection(vec4 dir){
     // set parameters
     // with parameters set:
     //   control the camera:
-    cout << "dir      : " << dir << endl;
+    //cout << "dir      : " << dir << endl;
 
     direction = dir;
     //direction = normalize(direction);
@@ -124,11 +124,20 @@ bool Plane::controlStick(vec4 angle_dir){
     // set parameters
     // with parameters set:
     //   control the camera:
-    cout << "angle_dir: " << angle_dir << endl;
+    //cout << "angle_dir: " << angle_dir << endl;
 
     thetas += angle_dir;
     //thetas = normalize(thetas);
 
 
     return true;
+}
+
+bool Plane::collided(){
+    if (cam->eye.y < -13){
+        resetOrientation();
+        cam->eye.y = -5;
+        return true;
+    }
+    return false;
 }

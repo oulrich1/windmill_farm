@@ -19,6 +19,7 @@ Terrain::Terrain(GLuint _program_id){
     if (err){
         cerr << "There was an error with the terrain. (Code: " << err << ").." << endl;
     }
+
 }
 Terrain::~Terrain(){
 
@@ -28,8 +29,8 @@ Terrain::~Terrain(){
 
 uint Terrain::init_terrainlogic(){
     percent_random      = 1.0;
-    land_level_offset   = 10;
-    amplitude           = 1;
+    land_level_offset   = 10; // downward..
+    amplitude           = 5;
 
     max_height = 1;
     width = (int)sqrt(NUM_VERTICIES);
@@ -46,10 +47,25 @@ uint Terrain::init_terraindata(){
     // terrain stored in 2D array terrain_data
     mergeTerrainDataIntoPoints();
 
+    init_models();
 
+    init_views();
+
+    model_view_matrix = view * model; //terrain model view
 
     return 0;
 }
+
+
+void Terrain::init_models(){
+    model = mat4({1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1});   //stretched
+    model = Scale(vec3(100,10,10)) * Translate(vec4(8, 7, -50, 0)) * RotateZ(180) * model;  // translated
+}
+
+void Terrain::init_views(){
+    view = mat4({1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1});  //Identity
+}
+
 
 uint Terrain::init_gl(){
     // send data to the gpu
@@ -87,7 +103,7 @@ printf("1.b.2.) Initialized: GPU with TERRAIN Geometry Data\n");
 
     /* find location of the mv and proj matrix vars in vshader */
     model_view = glGetUniformLocation( program_id, "model_view" );
-    new_color = glGetUniformLocation( program_id, "new_color" );
+    USE_COLOR_BUFFER =  glGetUniformLocation( program_id, "USE_COLOR_BUFFER" );
 
     /* belay the possiblity of misuse */
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -123,23 +139,42 @@ uint Terrain::mergeTerrainDataIntoPoints(){
     int Index = 0;
     for (int i = 0; i < width-1; i++) {
         for (int j = 0; j <= width-2; ++j) {
+            //     colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
+            // points[Index++] = vec4(i, j, terrain_data[i][j], 1);
+            //     colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
+            // points[Index++] = vec4(i+1, j, terrain_data[i+1][j], 1);
+            //     colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
+            // points[Index++] = vec4(i, j+1, terrain_data[i][j+1], 1);
+            //         colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
+            //     points[Index++] = vec4(i+1, j, terrain_data[i+1][j], 1);
+            //         colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
+            //     points[Index++] = vec4(i, j+1, terrain_data[i][j+1], 1);
+            //         colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
+            //     points[Index++] = vec4(i+1, j+1, terrain_data[i+1][j+1], 1);
+
                 colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
-            points[Index++] = vec4(i, j, terrain_data[i][j], 1);
+            points[Index++] = vec4(i, terrain_data[i][j], j,  1);
+
                 colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
-            points[Index++] = vec4(i+1, j, terrain_data[i+1][j], 1);
+            points[Index++] = vec4(i+1,terrain_data[i+1][j], j,  1);
+
                 colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
-            points[Index++] = vec4(i, j+1, terrain_data[i][j+1], 1);
+            points[Index++] = vec4(i, terrain_data[i][j+1], j+1,  1);
+
                     colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
-                points[Index++] = vec4(i+1, j, terrain_data[i+1][j], 1);
+                points[Index++] = vec4(i+1, terrain_data[i+1][j], j,  1);
+
                     colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
-                points[Index++] = vec4(i, j+1, terrain_data[i][j+1], 1);
+                points[Index++] = vec4(i, terrain_data[i][j+1], j+1,  1);
+
                     colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
-                points[Index++] = vec4(i+1, j+1, terrain_data[i+1][j+1], 1);
+                points[Index++] = vec4(i+1,  terrain_data[i+1][j+1], j+1, 1);
         }
     }
     // Index === 10000-200 * 6 ... + 6  // dont know where the extra 6 are coming from....
     return 0;
 }
+
 
 float Terrain::getHeightAt(int x, int y){
     if (x >= 0 && x < width && y >= 0 && y < width){
@@ -160,9 +195,12 @@ uint Terrain::display(){
     glBindBuffer( GL_ARRAY_BUFFER, this->vbo ); // bind the array buffer object
 
 
-        glUniformMatrix4fv( model_view, 1, GL_TRUE, model_view_matricies[0] );
-        glUniform4fv(new_color, 1, color4( 1.0, 0.0, 0.0, 1.0 ));
+        glUniformMatrix4fv( model_view, 1, GL_TRUE, model_view_matrix );
+        glUniform1i(USE_COLOR_BUFFER, 1);
+        //glUniform4fv(new_color, 1, color4( rand_f(), rand_f(), rand_f(), 1.0 ));
     glDrawArrays( GL_TRIANGLES, 0, NUM_VERTICIES ); // draws the terrain..
+
+    glUniform1i(USE_COLOR_BUFFER, 0);
 
     return 0;
 }

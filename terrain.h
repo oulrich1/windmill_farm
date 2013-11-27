@@ -25,6 +25,7 @@ private:
     void    init_models();
     void    init_views();
 
+
     /* GL STUFF: */
         GLuint  program_id,   // shader program id
                 vao,        // vertex  array object id
@@ -34,8 +35,8 @@ private:
 
         GLuint  model_view;  // model-view matrix uniform shader variable location
 
-        /* Color Blocks */
-        GLuint new_color;
+        /* SWITCH.. (hack...) */
+        GLuint USE_COLOR_BUFFER;
 
 
         /* ---------------- */

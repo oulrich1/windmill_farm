@@ -347,6 +347,10 @@ void Game::timerFunc(int value){
     }
 
     plane->fly();
+    if(plane->collided()){
+        cout << "Collided with the ground" << endl; //or about to..
+    }
+
     //cout << plane->throttleMessage() << endl;
 
     // perform animations and calculations regarding animations here
@@ -420,7 +424,7 @@ void Game::initGame() {
 
     srand(time(NULL));
     for(int i = 0; i < windmills.size(); i++){
-        vec4 offset = vec4(rand_f() * terrain->width - terrain->width/2, rand_f(), rand_f() * terrain->width - terrain->width/2, 0);
+        vec4 offset = vec4(rand_f() * terrain->width - terrain->width/2, rand_f()-6, rand_f() * terrain->width - terrain->width/2, 0);
         cout << offset << endl;
         windmills[i] = new Windmill(program_id, offset);
     }
