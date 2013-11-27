@@ -22,6 +22,9 @@ public:
 	Camera(GLuint program_id);
 	~Camera();
 
+	void set_at(vec4 _at);
+	void set_up(vec4 _up);
+
 	void update_proj(); // given the camera properties, send a new matrix to the graphics card
 	void update_view();
 

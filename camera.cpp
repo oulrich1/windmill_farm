@@ -25,6 +25,15 @@ Camera::~Camera(){
 }
 
 
+void Camera::set_at(vec4 _at){
+	at = _at;
+	update_view();
+}
+void Camera::set_up(vec4 _up){
+	up = _up;
+	update_view();
+}
+
 void Camera::update_proj(){
 	projection_mat4 = Perspective( fovy, aspect, zNear, zFar ); 
 	glUniformMatrix4fv( projection_loc, 1, GL_TRUE, projection_mat4);

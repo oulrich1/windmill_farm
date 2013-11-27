@@ -240,12 +240,15 @@ void Game::keyboard(unsigned char key, int x, int y) {
         plane->controlStick(vec4(0,M_PI/32,0,0));
         break;
     }
-    case '[': 
-    case ' ':  // reset values to their defaults
+    case '[': {  // reset values to their defaults
         WM(windmill)->init();
         for (int i = 0; i < windmills.size(); ++i){
             WM(windmills[i])->init();
         }
+        break;
+    }
+    case ' ':
+        plane->resetOrientation();
         break;
     }
     glutPostRedisplay();

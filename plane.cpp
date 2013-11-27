@@ -30,6 +30,13 @@ bool Plane::fly(){
 	}
 	return false;
 }
+
+bool Plane::resetOrientation(vec4 up){
+	thetas = vec4(0,0,0,0);
+	cam->set_up(up);	
+	return true;
+}
+
 bool Plane::pause(){
 	if (plane_frozen == false) {
 		plane_frozen = true;

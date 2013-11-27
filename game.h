@@ -8,6 +8,7 @@
 //#include "utils.h"
 #include "windmill.h"
 #include "plane.h"
+#include "terrain.h"
 //! #include "camera.h" // plane already includes this...
 
 

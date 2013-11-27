@@ -23,12 +23,11 @@ Dependancies:
 
 Controls:
 ------------------------------------------
-    Windmill Farm:
-    [  :   Resets the windmill sim
-    o/O   :   Rotates about the Y-Axis in only one direction CW
-    p/P   :   Star/Stop the windmill 
-
     Plane Controls:
+    
+    ' '/SPACE_BAR: resets the orientation, 
+                    (does not reset throttle)
+
     t:  Throttle UP
     T:  Throttle Down
 
@@ -47,6 +46,13 @@ Controls:
     RIGHT_ARROW :   Roll Right
     UP_ARROW    :   Pitch Down
     DOWN_ARROW  :   Pitch Up
+
+    Windmill Farm:
+    [  :   Resets the windmill sim
+    o/O   :   Rotates about the Y-Axis in only one direction CW
+    p/P   :   Star/Stop the windmill 
+
+  
 
 
 Code:
