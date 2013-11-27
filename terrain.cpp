@@ -174,7 +174,7 @@ uint Terrain::mergeTerrainDataIntoPoints(){
 
 float Terrain::getHeightAt(int x, int y){
     if (x >= 0 && x < width && y >= 0 && y < width){
-       return terrain_data[x][y];
+       return (model * vec4(x, terrain_data[x][y], y, 1)).y;
     }
     return 0;
 }

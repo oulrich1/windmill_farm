@@ -429,7 +429,7 @@ void Game::initGame() {
         z = rand_f() * terrain->width - terrain->width/2; 
         y = terrain->getHeightAt(x, z);
         
-        vec4 offset = vec4(x, y, z, 0);
+        vec4 offset = vec4(x, y + rand_f()*2 - 1, z, 0);
         cout << offset << endl;
         windmills[i] = new Windmill(program_id, offset);
     }

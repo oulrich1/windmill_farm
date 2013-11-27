@@ -177,7 +177,7 @@ void Windmill::init_data(){
 
 void Windmill::init_models() {
     models[0] = mat4({2,0,0,0}, {0,20,0,0}, {0,0,2,0}, {0,0,0,1});  //post
-    models[0] =  Translate(offset) * models[0];
+    models[0] =  Translate(offset) * Scale(8,8,8) * models[0];
 
     for (int i = 1; i < NumWindmillComponents; ++i) {
         models[i] = mat4({3,0,0,0}, 
@@ -188,7 +188,7 @@ void Windmill::init_models() {
 
 
     for (int i = 1; i < NumWindmillComponents; ++i) {
-        models[i] =  RotateZ(90*(i-1)) * models[i];// ROTATE
+        models[i] =  Scale(10,10,10) * RotateZ(90*(i-1)) * models[i];// ROTATE
         models[i] =  Translate(0,blade.height, -post.width) * models[i];// TRANSLATE
         models[i] =  Translate(offset) * models[i];
     }
