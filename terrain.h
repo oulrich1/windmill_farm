@@ -42,13 +42,13 @@ private:
         /* ---------------- */
        
         static const int NUM_COMPONENTS = 1; // 1 random terrain..
-        static const int NUM_VERTICIES = 10000; // a bunch of points
+        static const int NUM_VERTICIES = 1000000; // a bunch of points
 
         // this is what goes to GL..
         // because 6 pins per square and that many squares
         // extra 6 because mistakes...
-    Angel::vec4 points[(NUM_VERTICIES-100)*6 + 6];
-    Angel::vec4 colors[(NUM_VERTICIES-100)*6 + 6];
+    Angel::vec4 points[(NUM_VERTICIES-1000)*6 + 6];
+    Angel::vec4 colors[(NUM_VERTICIES-1000)*6 + 6];
 
         mat4 model_view_matrix;   //  concatentation of V * M;
 

@@ -29,10 +29,10 @@ Terrain::~Terrain(){
 
 uint Terrain::init_terrainlogic(){
     percent_random      = 1.0;
-    land_level_offset   = 10; // downward..
-    amplitude           = 5;
+    land_level_offset   = 0; // downward..
+    amplitude           = 2;
 
-    max_height = 1;
+    max_height = 2;
     width = (int)sqrt(NUM_VERTICIES);
 
     return 0;
@@ -59,7 +59,10 @@ uint Terrain::init_terraindata(){
 
 void Terrain::init_models(){
     model = mat4({1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1});   //stretched
-    model = Scale(vec3(100,10,10)) * Translate(vec4(8, 7, -50, 0)) * RotateZ(180) * model;  // translated
+    model = Scale(vec3(10,10,10)) * 
+            Translate(vec4(0, -1, 0, 0)) * 
+            RotateY(90) * 
+            Translate(vec4(-50, 0, -50, 0)) * model;  // translated
 }
 
 void Terrain::init_views(){
@@ -128,8 +131,12 @@ uint Terrain::generateRandomTerrain(float MAX_X, float MAX_Y, float MAX_Z){
     terrain_data.resize(MAX_X);     // MAX_X number of elements height 0
     srand(time(NULL));
     for (VVF::iterator iter = terrain_data.begin(); iter != terrain_data.end(); ++iter) {
-        float randomHeight = generateCompletelyRandomHeight(MAX_Z);
-        (*iter).resize(MAX_Y, randomHeight);
+
+        (*iter).resize(MAX_Y, 0);
+        for (VF::iterator inner_iter = (*iter).begin(); inner_iter != (*iter).end(); ++inner_iter){
+            float randomHeight = generateCompletelyRandomHeight(MAX_Z);
+            (*inner_iter) = randomHeight;
+        }
     }
 
     return 0;
@@ -137,37 +144,26 @@ uint Terrain::generateRandomTerrain(float MAX_X, float MAX_Y, float MAX_Z){
 
 uint Terrain::mergeTerrainDataIntoPoints(){
     int Index = 0;
+    
     for (int i = 0; i < width-1; i++) {
         for (int j = 0; j <= width-2; ++j) {
-            //     colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
-            // points[Index++] = vec4(i, j, terrain_data[i][j], 1);
-            //     colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
-            // points[Index++] = vec4(i+1, j, terrain_data[i+1][j], 1);
-            //     colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
-            // points[Index++] = vec4(i, j+1, terrain_data[i][j+1], 1);
-            //         colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
-            //     points[Index++] = vec4(i+1, j, terrain_data[i+1][j], 1);
-            //         colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
-            //     points[Index++] = vec4(i, j+1, terrain_data[i][j+1], 1);
-            //         colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
-            //     points[Index++] = vec4(i+1, j+1, terrain_data[i+1][j+1], 1);
 
                 colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
             points[Index++] = vec4(i, terrain_data[i][j], j,  1);
 
-                colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
+                //colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
             points[Index++] = vec4(i+1,terrain_data[i+1][j], j,  1);
 
-                colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
+                //colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
             points[Index++] = vec4(i, terrain_data[i][j+1], j+1,  1);
-
                     colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
+                    //colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
                 points[Index++] = vec4(i+1, terrain_data[i+1][j], j,  1);
 
-                    colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
+                    //colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
                 points[Index++] = vec4(i, terrain_data[i][j+1], j+1,  1);
 
-                    colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
+                    //colors[Index] = vec4(rand_f(), rand_f(), rand_f(), 1);
                 points[Index++] = vec4(i+1,  terrain_data[i+1][j+1], j+1, 1);
         }
     }

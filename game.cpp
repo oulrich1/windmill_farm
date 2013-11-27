@@ -424,7 +424,12 @@ void Game::initGame() {
 
     srand(time(NULL));
     for(int i = 0; i < windmills.size(); i++){
-        vec4 offset = vec4(rand_f() * terrain->width - terrain->width/2, rand_f()-6, rand_f() * terrain->width - terrain->width/2, 0);
+        float x, y, z;
+        x = rand_f() * terrain->width - terrain->width/2;
+        z = rand_f() * terrain->width - terrain->width/2; 
+        y = terrain->getHeightAt(x, z);
+        
+        vec4 offset = vec4(x, y, z, 0);
         cout << offset << endl;
         windmills[i] = new Windmill(program_id, offset);
     }

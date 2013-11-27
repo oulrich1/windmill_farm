@@ -8,8 +8,8 @@ Camera::Camera(GLuint program_id){
     projection_loc = glGetUniformLocation( program_id, "projection" );    
     /* - - - - - - - - - - - - - - - - - - - - */
 
-    eye = vec4( 0, 0, 2, 1.0 );
-    at = vec4( 0.0, 0.0, -1.0, 1.0 );
+    eye = vec4( 0, 2, 2, 1.0 );
+    at = vec4( 0.0, 1.0, -1.0, 1.0 );
     up = vec4( 0.0, 1.0, 0.0, 0.0 );
 
     update_view(); 
