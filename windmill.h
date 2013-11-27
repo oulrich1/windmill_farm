@@ -88,39 +88,41 @@ private:
 
     /* helpers */
             /* These helpers are from Angel's example code */
-    void quad( int a, int b, int c, int d );
-    void colorcube();
+    void    quad( int a, int b, int c, int d );
+    void    colorcube();
 
-    void init_logic();
-    void init_data();
-    void init_gl();
+    void    init_logic();
+    void    init_data();
+    void    init_gl();
 
-    void init_models();
-    void init_views();
+    void    init_models();
+    void    init_views();
 
 
-    void update_mv_matricies();
+    void    update_mv_matricies();
 
-    int Index = 0;
+    int     Index = 0;
 
     /* PUBLIC */
 public:
     Windmill(GLuint _program_id, vec4 _offset = vec4(0,0,0,0));
     ~Windmill();
     
-    void init();
+    void    init();
 
     // one iteration or "tick" for a windmill.. 
     // called within timer func in applcation
-    void tick();
-    void display();               // engages the gpu to display the primatives
+    void    tick();
+    void    display();               // engages the gpu to display the primatives
 
-    uint switch_mode();                 // switch the state, on or off
+    uint    switch_mode();                 // switch the state, on or off
                                         // returns current state
-    int switch_turbine_direction();    // returns current direction 
+    int     switch_turbine_direction();    // returns current direction 
 
-    void rotate(float rad); // rotates the entire body by radians
-    void turn_blades(float rad);    //turns the blades as a whole (4 total)
+    void    rotate(float rad); // rotates the entire body by radians
+    void    turn_blades(float rad);    //turns the blades as a whole (4 total)
+
+    uint    collides(Geometry* collidable);
 
     static const int NumVertices = 36;
 

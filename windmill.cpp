@@ -343,3 +343,10 @@ void Windmill::colorcube() {
     quad( 4, 5, 6, 7 );
     quad( 5, 4, 0, 1 );
 }
+
+
+
+
+uint Windmill::collides(Geometry* collidable){
+    return 0;
+}
