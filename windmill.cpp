@@ -220,12 +220,7 @@ void Windmill::init_views(){
 
 void Windmill::init_gl(){
     colorcube();    //generates a colored cube..
-
-    // for (int i = 0; i < 6; ++i)
-    // {
-    //  printf("%f %f %f %f\n", 
-    //      points[i].x , points[i].y , points[i].z , points[i].w);
-    // }
+    
 
     glGenVertexArrays( 1, &(this->vao) );   
     glBindVertexArray( this->vao );         // bind the vertex array object

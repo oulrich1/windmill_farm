@@ -33,9 +33,9 @@ private:
     // private variables and functions
 
         GLuint  program_id,   // shader program id
-            vao,        // vertex  array object id
-            vbo,        // vertex buffer object id
-            ibo;        // index  buffer object id
+                vao,        // vertex  array object id
+                vbo,        // vertex buffer object id
+                ibo;        // index  buffer object id
 
         // Model transformation parameters
         struct {       
@@ -73,7 +73,7 @@ private:
         mat4 views[NumWindmillComponents];
 
         uint    windmill_mode;
-        int    windmill_turbine_direction;
+        int     windmill_turbine_direction;
         float   current_blade_angle; // degrees
 
         struct {
@@ -127,14 +127,14 @@ public:
     static const int NumVertices = 36;
 
     /* Data set for GL to draw with*/
-    point4 points[NumVertices];
+    point4 points[NumVertices]; // from the verticies .. create the points array so GL can parse that array effectively..
     color4 colors[NumVertices];
 
     /* standard unit cube, with 8 pts */
     point4 vertices[PTS_N_CUBE];
     color4 vertex_colors[PTS_N_CUBE];
 
-    vec4 offset; // offsets this instance of a windmill
+    vec4    offset; // offsets this instance of a windmill in 3D space
 
 };
 

@@ -15,6 +15,9 @@ Plane::Plane(Camera* _cam){
     cam_frozen      = false;
     plane_frozen    = false;
 
+    drag_factor     = 0.034123; // random
+    mass            = 42;       // TODO:
+
 }
 Plane::~Plane(){
 
@@ -26,6 +29,7 @@ bool Plane::fly(){
             cam->walk(vec4(0,0,-((float)cur_throttle/max_throttle) * MAX_SPEED, 0));
             cam->adjust(thetas);
         }
+        thetas -=  thetas * drag_factor; // drag the change in angle..
         return true;
     }
     return false;
@@ -125,11 +129,6 @@ bool Plane::controlStick(vec4 angle_dir){
     thetas += angle_dir;
     //thetas = normalize(thetas);
 
-    if(delegated_camera_control){
-        // do camera stuff here...
-
-        //cam->adjust(angle_dir);
-    }
 
     return true;
 }

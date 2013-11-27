@@ -95,11 +95,11 @@ void Game::glut_initialize(int* argcp, char** argvp) {
 
 
 
-/* --------------------------------------------------------------------------  */
-/* CaLLBACK FUNCTIONS: hopefulling listed in the order that they were registred*/
+/* --------------------------------------------------------------------------   */
+/* CaLLBACK FUNCTIONS: hopefulling listed in the order that they were registred */
 
 
-/* Render */
+/* Render!!! just tell the objects to display their data!! */
 void Game::display() {
     // // display code here...
 
@@ -111,6 +111,10 @@ void Game::display() {
         for (int i = 0; i < windmills.size(); ++i){
             WM(windmills[i])->display();
         }
+
+    // this should be done only once on init...
+    // this is here just for reference.. 
+    terrain->display();
 
     
     glutSwapBuffers();   // swap double buffers
@@ -324,6 +328,8 @@ void Game::getMousePos(int *mouseX, int *mouseY){
 }
 
 
+/* used to perform animations:
+    modify the data within the objects.. */
 void Game::timerFunc(int value){
     const float mouseSensitivity = 0.05;
     int mouseX, mouseY;
@@ -357,6 +363,7 @@ void Game::timerFuncWrapper(int value){
 }
 
 
+/* Possibly perform calculations here.. */
 void Game::idleFunc(void){
     //glutPostRedisplay();
 }
@@ -405,7 +412,7 @@ void Game::initGame() {
     // initializes the object data points 
     //    && sends data to GPU
     //
-    terrain = new Terrain();
+    terrain = new Terrain(program_id);
 
 
     windmill = new Windmill(program_id); 

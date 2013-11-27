@@ -59,6 +59,9 @@ private:
 
     bool    cam_frozen;
     bool    plane_frozen;
+
+    float   drag_factor;
+    float   mass;
 };
 
 #endif

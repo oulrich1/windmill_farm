@@ -31,6 +31,7 @@ void Camera::set_at(vec4 _at){
 }
 void Camera::set_up(vec4 _up){
     up = _up;
+    at.y = eye.y;
     update_view();
 }
 
