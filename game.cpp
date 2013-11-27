@@ -38,6 +38,7 @@ void Game::glut_initialize(int* argcp, char** argvp) {
     glutInit(argcp, argvp);
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowSize(CurrentWidth, CurrentHeight);
+    glutInitWindowPosition(WindowPosX, WindowPosY);
     glutInitContextVersion(4, 0);
     glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
     glutInitContextProfile(GLUT_CORE_PROFILE);
@@ -82,6 +83,11 @@ void Game::glut_initialize(int* argcp, char** argvp) {
         glGetString(GL_VERSION)
     );
 
+
+   glutSetCursor(GLUT_CURSOR_INHERIT);  //GLUT_CURSOR_INHERIT, GLUT_CURSOR_NONE
+   glutWarpPointer(CurrentWidth/2, CurrentHeight/2); //for every frame as well
+ 
+
     printf("\n0.) Initialized: GLUT\n");
 
 }
@@ -101,6 +107,11 @@ void Game::display() {
 
         /* call draw arrays for each of the vbo's */
         windmill->display();
+
+        for (int i = 0; i < windmills.size(); ++i){
+            WM(windmills[i])->display();
+        }
+
     
     glutSwapBuffers();   // swap double buffers
     glutPostRedisplay(); // mark the window to be redrawn
@@ -116,6 +127,10 @@ void Game::resize(int width, int height) {
     // resize code here...
     CurrentWidth = width;
     CurrentHeight = height;
+
+    cam->aspect = GLfloat(width)/height;
+    cam->update_proj();   
+
     glutInitWindowSize(CurrentWidth, CurrentHeight);
     glViewport(0, 0, CurrentWidth, CurrentHeight);
     glutPostRedisplay();
@@ -129,22 +144,33 @@ void Game::resizeWrapper(int width, int height) {
 
 void Game::keyboard(unsigned char key, int x, int y) {
       // keyboard code here...
-    
+
     switch( key ) {
     case 033: // Escape Key
-    case 'q': case 'Q':
+    case '!': case '1':
         exit( EXIT_SUCCESS );
         break;
 
-    case 'y':  
+    case 'o':  
         WM(windmill)->rotate(toRadians(5));
+        for (int i = 0; i < windmills.size(); ++i){
+            WM(windmills[i])->rotate(toRadians(5));
+        }
     break;
-    case 'Y':
+    case 'O':
         WM(windmill)->rotate(toRadians(-5));
+        for (int i = 0; i < windmills.size(); ++i){
+            WM(windmills[i])->rotate(toRadians(-5));
+        }
     break;
-    case 's': {
+    case 'p': {
         // start/stop windmill turning
         uint wm_mode = WM(windmill)->switch_mode();    
+
+        for (int i = 0; i < windmills.size(); ++i){
+            WM(windmills[i])->switch_mode();
+        }
+
         if(wm_mode == WindmillMode::OFF){
             printf("Windmill Mode Off\n");
         } else {
@@ -152,9 +178,12 @@ void Game::keyboard(unsigned char key, int x, int y) {
         }
         break;
     }
-    case 'S': {
+    case 'P': {
         // start/stop windmill turning
-        int wm_direction = WM(windmill)->switch_turbine_direction();    
+        int wm_direction = WM(windmill)->switch_turbine_direction();   
+        for (int i = 0; i < windmills.size(); ++i){
+            WM(windmills[i])->switch_turbine_direction();
+        } 
         if(wm_direction == 1){
             printf("Windmill rotating CW\n");
         } else {
@@ -162,9 +191,47 @@ void Game::keyboard(unsigned char key, int x, int y) {
         }
         break;
     }
-    case 'r': 
+
+    case 'w': {
+        cam->walk(vec4(0,0,-1,0));
+        break;
+    }
+    case 'a': {
+        cam->walk(vec4(-1,0,0,0));
+        break;
+    }
+    case 's': {
+        cam->walk(vec4(0,0,1,0));
+        break;
+    }
+    case 'd': {
+        cam->walk(vec4(1,0,0,0));
+        break;
+    }
+
+    case 'x': {
+        cam->walk(vec4(0,1,0,0));
+        break;
+    }
+    case 'z': {
+        cam->walk(vec4(0,-1,0,0));
+        break;
+    }
+
+    case 'q': {
+        cam->adjust(vec4(0,-M_PI/32,0,0));
+        break;
+    }
+    case 'e': {
+        cam->adjust(vec4(0,M_PI/32,0,0));
+        break;
+    }
+    case '[': 
     case ' ':  // reset values to their defaults
         WM(windmill)->init();
+        for (int i = 0; i < windmills.size(); ++i){
+            WM(windmills[i])->init();
+        }
         break;
     }
     glutPostRedisplay();
@@ -175,21 +242,88 @@ void Game::keyboardWrapper(unsigned char keycode, int x, int y) {
 }
 
 
+void Game::specialKeys(int key, int x, int y) {
+      // keyboard code here...
+
+    switch( key ) {
+   
+        case GLUT_KEY_LEFT: {
+            cam->adjust(vec4(0,0,-M_PI/32, 0));
+            //cam->walk(vec4(-1,0,0,0));
+            break;
+        }
+        case GLUT_KEY_RIGHT: {
+            cam->adjust(vec4(0,0,M_PI/32, 0));
+            //cam->walk(vec4(1,0,0,0));
+            break;
+        }
+        case GLUT_KEY_UP: {
+            //cam->walk(vec4(0,0,0,0));
+            cam->adjust(vec4(-M_PI/32,0,0, 0));
+            break;
+        }
+        case GLUT_KEY_DOWN: {
+            //cam->walk(vec4(0,0,0,0));
+            cam->adjust(vec4(M_PI/32,0,0, 0));
+            break;
+        }
+
+
+    }
+    glutPostRedisplay();
+}
+
+void Game::specialKeysWrapper(int keycode, int x, int y){
+    callbackInstance->specialKeys(keycode, x, y);
+}
+
+
+
+/* MOUSE CALLBACKS */
+void Game::mouse(int button, int state, int x, int y){
+    
+}
+
+void Game::mouseWrapper(int button, int state, int x, int y){
+    callbackInstance->mouse(button, state, x, y);
+}
 
 
 void Game::mouseMotionFunc(int x, int y){
+    currentMouseX = x;
+    currentMouseY = y;
     //printf("%d %d\n", x, y);
     //paddle->set_position(vec2( ((2.0*x)/CurrentWidth - 0.82) ,  ((-2.0*y)/CurrentHeight) + 1.76) );
-
 }
 
 void Game::mouseMotionFuncWrapper(int x, int y){
     callbackInstance->mouseMotionFunc(x, y);
 }
+/* - - END - - - - - - MOUSE CALLBACKS */
+
+
+void Game::getMousePos(int *mouseX, int *mouseY){
+    *mouseX = currentMouseX;
+    *mouseY = currentMouseY;
+}
 
 
 void Game::timerFunc(int value){
+    const float mouseSensitivity = 0.05;
+    int mouseX, mouseY;
+    getMousePos(&mouseX, &mouseY);
+    mouseX = mouseX - CurrentWidth/2;
+    mouseY = mouseY - CurrentHeight/2;
+    cam->offsetOrientation(vec2(mouseSensitivity * mouseX, mouseSensitivity * mouseY));
+    //glutWarpPointer(CurrentWidth/2, CurrentHeight/2);
+
+
     WM(windmill)->tick();   // calcuate next position (if relevant)
+
+    for (int i = 0; i < windmills.size(); ++i){
+        WM(windmills[i])->tick();
+    }
+
 
     // perform animations and calculations regarding animations here
     glutPostRedisplay();
@@ -236,8 +370,13 @@ void Game::initGame() {
     /* - - - - - - - - - - - - - - - - - - - - */
     /*      Shader init                        */
 
-    //GLuint programId  = InitShader(  "shader_vertex_generic.glsl", 
-                        //            "shader_fragment_generic.glsl" );
+        // member variable "program_id"
+    program_id = InitShader(  "shader_vertex_generic.glsl", 
+                              "shader_fragment_generic.glsl" );
+    glUseProgram( program_id );
+
+
+
 
     printf("1.) Initialized: Shaders\n");
 
@@ -247,10 +386,29 @@ void Game::initGame() {
 
     // initializes the object data points 
     //    && sends data to GPU
-    windmill = new Windmill(); 
+    //
+    windmill = new Windmill(program_id); 
+    windmills = std::vector<Geometry*>(100, NULL);  
 
+    srand(time(NULL));
+    for(int i = 0; i < windmills.size(); i++){
+        vec4 offset = vec4(rand_f() * 30 - 15, rand_f()-1, rand_f() * 30 - 15, 0);
+        cout << offset << endl;
+        windmills[i] = new Windmill(program_id, offset);
+    }
+    cout << endl;
+
+    /* - - - - - - - - - - - - - - - - - - - - */
+    /* camera init code here...  */
+    /* What this part does is updates the shaders so that the
+       uniform variables 'camera_view and projection' are set */
+    cam = new Camera(program_id);
+
+
+    glEnable( GL_DEPTH_TEST );
+    glClearColor( 1.0, 1.0, 1.0, 1.0 ); 
     
-    printf("2.) Initialized: Geometry Objects\n");
+    printf("2.) Initialized: Game Objects\n");
 }
 
 /* -------------------------------------------------  */
@@ -262,7 +420,9 @@ void Game::registerCallbacks() {
     glutDisplayFunc(displayWrapper);        // calls PostRedisplay
     glutReshapeFunc(resizeWrapper);         // inits the window when window is modified
     glutKeyboardFunc(keyboardWrapper);      // keyboard callback
+    glutSpecialFunc(specialKeysWrapper);
 
+    glutMouseFunc(mouseWrapper);
     glutPassiveMotionFunc(mouseMotionFuncWrapper);
 
     glutTimerFunc(0, timerFuncWrapper, 0);  // timer function callback for animation
@@ -275,7 +435,7 @@ void Game::registerCallbacks() {
 
 
 void Game::run() {
-    
+
     //the glut callbacks depend on this..
     this->initGame();               // sets up the game instance: 
 

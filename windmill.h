@@ -61,16 +61,10 @@ private:
 
         GLuint  model_view;  // model-view matrix uniform shader variable location
 
-                // Projection transformation parameters
-            // [NOT USED]
-                // GLfloat  fovy = 45.0;  // Field-of-view in Y direction angle (in degrees)
-                // GLfloat  aspect;       // Viewport aspect ratio
-                // GLfloat  zNear = 0.5, zFar = 3.0;
-
-                // GLuint  projection; // projection matrix uniform shader variable location
-
         /* Color Blocks */
         GLuint new_color;
+
+
         /* ---------------- */
         static const int NumWindmillComponents = 5; // 4 blades and 1 stem..
 
@@ -111,7 +105,7 @@ private:
 
     /* PUBLIC */
 public:
-    Windmill();
+    Windmill(GLuint _program_id, vec4 _offset = vec4(0,0,0,0));
     ~Windmill();
     
     void init();
@@ -137,6 +131,8 @@ public:
     /* standard unit cube, with 8 pts */
     point4 vertices[PTS_N_CUBE];
     color4 vertex_colors[PTS_N_CUBE];
+
+    vec4 offset; // offsets this instance of a windmill
 
 };
 

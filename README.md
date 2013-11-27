@@ -1,6 +1,6 @@
 
 
-csci566 Project 2: Windmill
+csci566 Project 3: Camera Flight over the Windmill Farm :)
 ==========================================
 
 Completed!
@@ -8,13 +8,17 @@ Completed!
 To Compile and Run:
 ------------------------------------------
     make
+    ./flight_sim
 
-    ./spinning_windmill
+Dependancies:
+------------------------------------------
+    -lglut -lGLEW -lGL -lGLU -lm 
+    (as usual)
 
 
 Controls:
 ------------------------------------------
-    r   :   Resets the windmill sim
+    [  :   Resets the windmill sim
     y   :   Rotates about the Y-Axis in only one direction CW
     s   :   Star/Stop the windmill
 

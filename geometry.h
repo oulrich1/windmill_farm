@@ -3,10 +3,10 @@
  * Base class for geometric objects.
  */
 #include "Angel.h"
- #include <vector>
- #include <iostream>
+#include <vector>
+#include <iostream>
 
- using namespace std;
+using namespace std;
 
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;
@@ -42,8 +42,6 @@ public:
     // rotates the entire body by radians
     virtual void rotate(float rad) = 0;
 
-    //static const void colorcube();
-        // setters, getters, common behaviors
 };
 
 

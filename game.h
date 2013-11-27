@@ -5,24 +5,34 @@
  */
 
 
+//#include "utils.h"
 #include "windmill.h"
+#include "camera.h"
+
 
 #ifndef GAME_H
 #define GAME_H
 
 #define WINDOW_TITLE_PREFIX "Windmill"
-#define WINDOW_WIDTH  600
+#define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 600
+
+#define WindowPosX 500
+#define WindowPosY 50
 
 #define WM(w) ((Windmill*)w)  // easy type cast to windmill from geometry
 
+#define rand_f() ((float) rand() / (RAND_MAX))
 
 class Game {
 private:
 
-      // private identifiers
+
+    GLuint program_id;
+
+    // private identifiers :: unused!
     GLuint                  // these are attributes of the SHADER Programs, VAO, and VBO.. 
-        programId[3],         //  these are set when each object in the game create's their own VBO
+        programId[3],       // these are set when each object in the game create's their own VBO
         vaoId[3],
         bufferId[3],
         IndexBufferId[3],
@@ -33,16 +43,21 @@ private:
         CurrentHeight, 
         WindowHandle;
 
+    Camera* cam;             // the camera description object
+
     Geometry**  game_objects;
+    std::vector<Geometry*>   windmills;
     Geometry*   windmill;
 
-    static const GLuint                // indices into the gl attributes: vao, vbo, programid
+    static const GLuint     // indices into the gl attributes: vao, vbo, programid
         PADDLE_TYPE = 0,
         BALL_TYPE = 1,
         BRICK_TYPE = 2;
     
 
     char PREV_KEY;
+    int currentMouseX;
+    int currentMouseY;
 
     /*
        Because GLUT expects C-style functions to be used with its callback
@@ -56,10 +71,12 @@ private:
     static void displayWrapper();
     static void resizeWrapper(int, int);
     static void keyboardWrapper(unsigned char, int, int);
+    static void specialKeysWrapper(int, int, int);
     static void timerFuncWrapper(int);
     static void idleFuncWrapper(void);
     static void closeCleanupWrapper(void);
    
+    static void mouseWrapper(int button, int state, int x, int y);
     static void mouseMotionFuncWrapper(int x, int y);
     // add more callback wrappers as needed 
 
@@ -89,9 +106,13 @@ private:
     void display();
     void resize(int, int);
     void keyboard(unsigned char, int, int);
+    void specialKeys(int, int, int );
     void timerFunc(int);
     void idleFunc(void);
     void closeCleanup(void);
+
+    void mouse(int button, int state, int x, int y);
+    void getMousePos(int *, int *);
     void mouseMotionFunc(int x, int y);
     /*
        Initializes the actual game stuff.

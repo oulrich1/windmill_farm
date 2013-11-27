@@ -5,12 +5,21 @@ in  vec4 vColor;
 out vec4 color;
 
 uniform mat4 model_view;
+uniform mat4 camera_view;
 uniform mat4 projection;
+
 uniform vec4 new_color;
+
 
 void main() 
 {
-    // projection*
-    gl_Position = model_view*vPosition/vPosition.w;
+
+	// model_view matrix {object.view * object.model}
+	// (depends on the object itself..) 
+	//   TODO: shouldnt be uniform:
+
+	// the view for the camera, (effects all world objects..)
+
+    gl_Position =  projection * camera_view * model_view * vPosition;
     color = new_color; //vColor
 } 

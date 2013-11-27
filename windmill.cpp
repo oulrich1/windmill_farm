@@ -2,7 +2,10 @@
 
 #include "windmill.h"
 
-Windmill::Windmill() : Geometry(){
+Windmill::Windmill(GLuint _program_id, vec4 _offset) : Geometry(){
+
+    this->offset = _offset;
+    this->program_id = _program_id;
 
     this->init_logic();
     this->init_data();  // initializes this object's data
@@ -90,24 +93,26 @@ void Windmill::rotate(float rad){ // rad is a change in radians
     if (view_angles.y >= 2* M_PI){
         view_angles.y = 0;
     }
-
     update_mv_matricies();
-
 }
 
 void Windmill::update_mv_matricies(){
     mat4 rotateY = RotateY(view_angles.y / DegreesToRadians);
 
-    model_view_matricies[0] = views[0] * rotateY * models[0];
+    // UPDATE: perform the transformation on the object at the origin...
+    model_view_matricies[0] = views[0] * Translate(offset) * rotateY * Translate(-offset) * models[0];
 
     for (int i = 1; i < NumWindmillComponents; ++i) {
+        // gotta rotate the blades themselves 
+        // around their relative z asix
         mat4 ctm =  rotateY *
-                Translate(0, blade.height, 0) *
+                Translate(0, blade.height, 0)  *
                 RotateZ( (current_blade_angle + 180*(i-1)) 
                          * windmill_turbine_direction) *
                 Translate(0, -blade.height, 0);
 
-        model_view_matricies[i] = views[i] * ctm * models[i];
+        // UPDATE: perform the transformation on the object at the origin...
+        model_view_matricies[i] = views[i] * Translate(offset) * ctm * Translate(-offset) * models[i];
     }
 }
 
@@ -172,6 +177,7 @@ void Windmill::init_data(){
 
 void Windmill::init_models() {
     models[0] = mat4({2,0,0,0}, {0,20,0,0}, {0,0,2,0}, {0,0,0,1});  //post
+    models[0] =  Translate(offset) * models[0];
 
     for (int i = 1; i < NumWindmillComponents; ++i) {
         models[i] = mat4({3,0,0,0}, 
@@ -184,6 +190,7 @@ void Windmill::init_models() {
     for (int i = 1; i < NumWindmillComponents; ++i) {
         models[i] =  RotateZ(90*(i-1)) * models[i];// ROTATE
         models[i] =  Translate(0,blade.height, -post.width) * models[i];// TRANSLATE
+        models[i] =  Translate(offset) * models[i];
     }
 
 }
@@ -235,11 +242,6 @@ printf("1.b.1.) Initialized: GPU VAO && VBO specifically for Windmill\n");
 
 printf("1.b.2.) Initialized: GPU with Windmill Geometry Data\n");
     
-        // member variable "program_id"
-        program_id = InitShader(  "shader_vertex_generic.glsl", 
-                               "shader_fragment_generic.glsl" );
-        glUseProgram( program_id );
-
         GLuint vPosition = glGetAttribLocation( program_id, "vPosition" );
         glEnableVertexAttribArray( vPosition );
         glVertexAttribPointer( vPosition, 4, GL_FLOAT, GL_FALSE, 0,
@@ -251,20 +253,13 @@ printf("1.b.2.) Initialized: GPU with Windmill Geometry Data\n");
         glVertexAttribPointer( vColor, 4, GL_FLOAT, GL_FALSE, 0,
                    BUFFER_OFFSET(sizeof(points)) );
 
-printf( "1.b.3.) Initialized: In Context of shader Windmill::program_id ->\n"\
-        "           bind shader variables to data in buffer\n");
-
-    /* for the sake of consistency.. no magic */
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-
     /* find location of the mv and proj matrix vars in vshader */
     model_view = glGetUniformLocation( program_id, "model_view" );
     new_color = glGetUniformLocation( program_id, "new_color" );
-    //projection = glGetUniformLocation( program_id, "projection" );
 
-    glEnable( GL_DEPTH_TEST );
-    glClearColor( 1.0, 1.0, 1.0, 1.0 ); 
+    /* belay the possiblity of misuse */
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
 }
 
