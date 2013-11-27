@@ -5,6 +5,10 @@ csci566 Project 3: Camera Flight over the Windmill Farm :)
 
 Completed!
 
+About:
+------------------------------------------
+    Fly over a windmill farm
+
 To Compile and Run:
 ------------------------------------------
     make
@@ -18,36 +22,47 @@ Dependancies:
 
 Controls:
 ------------------------------------------
+    Windmill Farm:
     [  :   Resets the windmill sim
-    y   :   Rotates about the Y-Axis in only one direction CW
-    s   :   Star/Stop the windmill
+    o/O   :   Rotates about the Y-Axis in only one direction CW
+    p/P   :   Star/Stop the windmill 
+
+    Camera Controls:
+    w:  Move Forward
+    a:  Move Backward
+    s:  Strafe Left
+    d:  Strafe Right
+
+    x:  Thrust Up (Strafe Up)
+    z:  Thrust Down (Strafe Down)
+
+    q:  Yaw Left
+    e:  Yaw Right
+
+    LEFT_ARROW  :   Roll Left
+    RIGHT_ARROW :   Roll Right
+    UP_ARROW    :   Pitch Down
+    DOWN_ARROW  :   Pitch Up
 
 
 Code:
 ------------------------------------------
     (Overview of file/design heirarchy)
     Main.cpp -> Game -> Windmill -> Geometry -> Angel.h
-
-    Windmill is the bulk of the program; handles sending it's own data
-        to the GPU. It also handles the display functions
-
-    Game.cpp is essentially the object's controller.
-
-    Main just starts the Windmill simulation.
+                     -> Camera
 
 
 Challenges:
 ------------------------------------------
-    -> Much less GL challenge, and more of design challenge
-    -> Decisions about implementation were the most challenging:
-        ->> Decision between rotation about Y vs
-        ->> (vs) changing the view matrix.. but it turned out
-        ->> changing the models with the view matrix changed clipping plane
-            => todo: eventually figure out why it was doing that
+    -> Camera.. that was the challenge..
+    -> Trying to figure out how to orient 
+        Camera was the most difficult:
+            Specifically: components of the thetas
 
-        ->> blade rotation wasn't too bad
-            => however: i might have to rethink how i am doing the 
-                matrix cacluation
+    -> Change the basis of the system and found 
+        angle components from that...
+
+    -> Working on the random Landscape
 
 
 

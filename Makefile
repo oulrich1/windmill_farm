@@ -4,7 +4,7 @@ OPTIONS= $(GCC_OPTIONS) $(LIBS)
 TARGET = flight_sim
 
 OBJ=
-SRC= geometry.cpp windmill.cpp camera.cpp game.cpp
+SRC= geometry.cpp windmill.cpp camera.cpp plane.cpp game.cpp
 
 $(TARGET):
 	g++ main.cpp ./Common/InitShader.cpp $(SRC)  $(OPTIONS) -o $(TARGET)

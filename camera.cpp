@@ -1,6 +1,4 @@
 #include "camera.h"
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtc/quaternion.hpp>
 
 Camera::Camera(GLuint program_id){
  	/* camera view matrix..  LOCATION IN SHADER */
@@ -71,20 +69,21 @@ void Camera::adjust(vec4 direction){
 	   	M^-1 == transpose(M)   */
 	mat4 CameraToStandardBasis_M = transpose(M);
 
-cout << "M : " <<  M << endl;
-cout << "M': " <<  CameraToStandardBasis_M << endl;
+// cout << "M : " <<  M << endl;
+// cout << "M': " <<  CameraToStandardBasis_M << endl;
 
 	/* Transform the camera in 
 		it's own reference frame */
 
 	vec4 thetas_prime = CameraToStandardBasis_M * thetas;
-	// YAW:
+	// YAW & PITCH (translate because at is not a vector.. its a point)
 	at = Translate(eye.x, eye.y, eye.z) *  
 		RotateX(thetas_prime.x) * 
 		RotateY(thetas_prime.y) * 
 		RotateZ(thetas_prime.z) * 
 		Translate(-eye.x, -eye.y, -eye.z) * at;
 
+	// PITCH & ROLL (luckily up is a vector..)
 	look = eye - at;
 	up = RotateX(thetas_prime.x) *
 		RotateY(thetas_prime.y) * 
@@ -93,8 +92,8 @@ cout << "M': " <<  CameraToStandardBasis_M << endl;
 
 	/* */
 
-cout << "EYE VECTOR: " << eye << endl << " LOOK VECTOR: " << look << endl << " UP VECTOR: " << up << "AT POINT: " << at << endl;
-cout << "-- - - - --" << endl;
+// cout << "EYE VECTOR: " << eye << endl << " LOOK VECTOR: " << look << endl << " UP VECTOR: " << up << "AT POINT: " << at << endl;
+// cout << "-- - - - --" << endl;
 
 	update_view();
 
@@ -108,7 +107,6 @@ void Camera::walk(vec4 direction){
 	mat4 CameraToStandardBasis_M = transpose(M);
 
 cout << "TRANSPOSE: " << CameraToStandardBasis_M << endl;
-
 cout << "BEFORE: " <<  direction << endl;
 
 	direction = CameraToStandardBasis_M * direction;

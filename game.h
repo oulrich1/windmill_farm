@@ -7,7 +7,8 @@
 
 //#include "utils.h"
 #include "windmill.h"
-#include "camera.h"
+#include "plane.h"
+//! #include "camera.h" // plane already includes this...
 
 
 #ifndef GAME_H

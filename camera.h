@@ -1,6 +1,4 @@
 #include "Angel.h"
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtc/quaternion.hpp>
 #include <vector>
 #include <iostream>
 

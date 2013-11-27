@@ -191,7 +191,17 @@ void Game::keyboard(unsigned char key, int x, int y) {
         }
         break;
     }
+    /* plane controls: set throttle.. */
+    // case 'T': {
+    //     plane->increaseThrottle();
+    //     break;
+    // }
+    // case 't': {
+    //     plane->decreaseThrottle();
+    //     break;
+    // }
 
+    /* plane controls: forward */
     case 'w': {
         cam->walk(vec4(0,0,-1,0));
         break;
@@ -209,6 +219,7 @@ void Game::keyboard(unsigned char key, int x, int y) {
         break;
     }
 
+    /* plane controls : strafe UP/DOWN */
     case 'x': {
         cam->walk(vec4(0,1,0,0));
         break;
@@ -218,6 +229,7 @@ void Game::keyboard(unsigned char key, int x, int y) {
         break;
     }
 
+    /* plane controls: YAW  */
     case 'q': {
         cam->adjust(vec4(0,-M_PI/32,0,0));
         break;
@@ -246,7 +258,7 @@ void Game::specialKeys(int key, int x, int y) {
       // keyboard code here...
 
     switch( key ) {
-   
+        /* plane controls : ROLL and PITCH */
         case GLUT_KEY_LEFT: {
             cam->adjust(vec4(0,0,-M_PI/32, 0));
             //cam->walk(vec4(-1,0,0,0));
@@ -267,7 +279,6 @@ void Game::specialKeys(int key, int x, int y) {
             cam->adjust(vec4(M_PI/32,0,0, 0));
             break;
         }
-
 
     }
     glutPostRedisplay();
