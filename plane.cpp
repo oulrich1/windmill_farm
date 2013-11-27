@@ -24,6 +24,7 @@ bool Plane::fly(){
 	if (plane_frozen == false) {
 		if (delegated_camera_control){
 			cam->walk(vec4(0,0,-((float)cur_throttle/max_throttle) * MAX_SPEED, 0));
+			cam->adjust(thetas);
 		}
 		return true;
 	}
@@ -114,13 +115,13 @@ bool Plane::controlStick(vec4 angle_dir){
 	//   control the camera:
 	cout << "angle_dir: " << angle_dir << endl;
 
-	thetas = angle_dir;
+	thetas += angle_dir;
 	//thetas = normalize(thetas);
 
 	if(delegated_camera_control){
 		// do camera stuff here...
 
-		cam->adjust(this->thetas);
+		//cam->adjust(angle_dir);
 	}
 
 	return true;
