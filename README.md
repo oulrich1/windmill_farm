@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 
 csci566 Project 3: Camera Flight over the Windmill Farm :)
 ==========================================
@@ -24,7 +22,7 @@ Dependancies:
 Controls:
 ------------------------------------------
     Plane Controls:
-    
+
     ' '/SPACE_BAR: resets the orientation, 
                     (does not reset throttle)
 
@@ -82,4 +80,3 @@ Challenges:
 =======
 windmill_farm
 =============
->>>>>>> a56a9693fec837b5e7a8562f41f3e00af6a115af

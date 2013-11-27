@@ -405,12 +405,15 @@ void Game::initGame() {
     // initializes the object data points 
     //    && sends data to GPU
     //
+    terrain = new Terrain();
+
+
     windmill = new Windmill(program_id); 
     windmills = std::vector<Geometry*>(100, NULL);  
 
     srand(time(NULL));
     for(int i = 0; i < windmills.size(); i++){
-        vec4 offset = vec4(rand_f() * 30 - 15, rand_f()-1, rand_f() * 30 - 15, 0);
+        vec4 offset = vec4(rand_f() * terrain->width - terrain->width/2, rand_f(), rand_f() * terrain->width - terrain->width/2, 0);
         cout << offset << endl;
         windmills[i] = new Windmill(program_id, offset);
     }
@@ -426,8 +429,11 @@ void Game::initGame() {
     plane = new Plane(cam);
 
 
+    
+
+
     glEnable( GL_DEPTH_TEST );
-    glClearColor( 1.0, 1.0, 1.0, 1.0 ); 
+   glClearColor((float)135/255, (float)206/255, (float)250/255, 1.0 ); 
     
     printf("2.) Initialized: Game Objects\n");
 }
@@ -466,7 +472,7 @@ void Game::run() {
     printf("3.) Initialized: Various Callbacks, including Display()\n\n");
     
 
-    glClearColor( 1.0, 1.0, 1.0, 1.0 );
+    glClearColor((float)135/255, (float)206/255, (float)250/255, 1.0 ); 
 
 
     printf("Last.) Running the game..\n");

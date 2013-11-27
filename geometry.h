@@ -42,6 +42,9 @@ public:
     // rotates the entire body by radians
     virtual void rotate(float rad) = 0;
 
+    //TODO:
+    // virtual void collides(Geometry *) = 0;
+
 };
 
 

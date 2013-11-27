@@ -9,6 +9,7 @@
 #include "windmill.h"
 #include "plane.h"
 #include "terrain.h"
+#include "utils.h"
 //! #include "camera.h" // plane already includes this...
 
 
@@ -24,7 +25,7 @@
 
 #define WM(w) ((Windmill*)w)  // easy type cast to windmill from geometry
 
-#define rand_f() ((float) rand() / (RAND_MAX))
+
 
 class Game {
 private:
@@ -32,30 +33,18 @@ private:
 
     GLuint program_id;
 
-    // private identifiers :: unused!
-    GLuint                  // these are attributes of the SHADER Programs, VAO, and VBO.. 
-        programId[3],       // these are set when each object in the game create's their own VBO
-        vaoId[3],
-        bufferId[3],
-        IndexBufferId[3],
-        ActiveIndexBuffer;
-
-    int 
-        CurrentWidth,
+    int CurrentWidth,
         CurrentHeight, 
         WindowHandle;
 
-    Camera* cam;             // the camera description object
-    Plane* plane;
+    Camera*     cam;             // the camera description object
+    Plane*      plane;
+    Terrain*    terrain;
 
-    Geometry**  game_objects;
-    std::vector<Geometry*>   windmills;
+    Geometry**  game_objects;   // not sure what im doing with this yet...
+
     Geometry*   windmill;
-
-    static const GLuint     // indices into the gl attributes: vao, vbo, programid
-        PADDLE_TYPE = 0,
-        BALL_TYPE = 1,
-        BRICK_TYPE = 2;
+    std::vector<Geometry*>   windmills;
     
 
     char PREV_KEY;
