@@ -2,10 +2,15 @@
 #include <vector>
 #include <iostream>
 
+#include "utils.h"
+
 using namespace std;
 
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;
+
+#ifndef CAMERA_H
+#define CAMERA_H 
 
 #define quaternion glm::gtx::quaternion
 
@@ -61,3 +66,5 @@ public:
     // turn rate:
     float dTheta = 4.5, dPhi = 0.5;
 };
+
+#endif

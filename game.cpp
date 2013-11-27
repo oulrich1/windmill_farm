@@ -193,51 +193,51 @@ void Game::keyboard(unsigned char key, int x, int y) {
     }
 
     /* plane controls: set throttle.. */
-    case 'T': {
+    case 't': {
         plane->increaseThrottle();
         break;
     }
-    case 't': {
+    case 'T': {
         plane->decreaseThrottle();
         break;
     }
 
-    /* plane controls: forward */
+    /* plane controls: forward,backward, strafe: sides: left,right */
     case 'w': {
-        cam->walk(vec4(0,0,-1,0));
-        //plane->controlStick(vec4(0,0,-1,0));
+        //cam->walk(vec4(0,0,-1,0));
+        plane->controlDirection(vec4(0,0,-1,0));
         break;
     }
     case 'a': {
-        cam->walk(vec4(-1,0,0,0));
+        plane->controlDirection(vec4(-1,0,0,0));
         break;
     }
     case 's': {
-        cam->walk(vec4(0,0,1,0));
+       plane->controlDirection(vec4(0,0,1,0));
         break;
     }
     case 'd': {
-        cam->walk(vec4(1,0,0,0));
+       plane->controlDirection(vec4(1,0,0,0));
         break;
     }
 
     /* plane controls : strafe UP/DOWN */
     case 'x': {
-        cam->walk(vec4(0,1,0,0));
+       plane->controlDirection(vec4(0,1,0,0));
         break;
     }
     case 'z': {
-        cam->walk(vec4(0,-1,0,0));
+       plane->controlDirection(vec4(0,-1,0,0));
         break;
     }
 
     /* plane controls: YAW  */
     case 'q': {
-        cam->adjust(vec4(0,-M_PI/32,0,0));
+        plane->controlStick(vec4(0,-M_PI/32,0,0));
         break;
     }
     case 'e': {
-        cam->adjust(vec4(0,M_PI/32,0,0));
+        plane->controlStick(vec4(0,M_PI/32,0,0));
         break;
     }
     case '[': 
@@ -262,23 +262,23 @@ void Game::specialKeys(int key, int x, int y) {
     switch( key ) {
         /* plane controls : ROLL and PITCH */
         case GLUT_KEY_LEFT: {
-            cam->adjust(vec4(0,0,-M_PI/32, 0));
+            plane->controlStick(vec4(0,0,-M_PI/32, 0));
             //cam->walk(vec4(-1,0,0,0));
             break;
         }
         case GLUT_KEY_RIGHT: {
-            cam->adjust(vec4(0,0,M_PI/32, 0));
+            plane->controlStick(vec4(0,0,M_PI/32, 0));
             //cam->walk(vec4(1,0,0,0));
             break;
         }
         case GLUT_KEY_UP: {
             //cam->walk(vec4(0,0,0,0));
-            cam->adjust(vec4(-M_PI/32,0,0, 0));
+            plane->controlStick(vec4(-M_PI/32,0,0, 0));
             break;
         }
         case GLUT_KEY_DOWN: {
             //cam->walk(vec4(0,0,0,0));
-            cam->adjust(vec4(M_PI/32,0,0, 0));
+            plane->controlStick(vec4(M_PI/32,0,0, 0));
             break;
         }
 
@@ -337,6 +337,8 @@ void Game::timerFunc(int value){
         WM(windmills[i])->tick();
     }
 
+    plane->fly();
+    //cout << plane->throttleMessage() << endl;
 
     // perform animations and calculations regarding animations here
     glutPostRedisplay();
@@ -412,10 +414,13 @@ void Game::initGame() {
     cout << endl;
 
     /* - - - - - - - - - - - - - - - - - - - - */
-    /* camera init code here...  */
+    /*      camera init code here...  */
     /* What this part does is updates the shaders so that the
        uniform variables 'camera_view and projection' are set */
     cam = new Camera(program_id);
+
+    // the user controls the plane.
+    plane = new Plane(cam);
 
 
     glEnable( GL_DEPTH_TEST );

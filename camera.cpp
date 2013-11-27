@@ -48,6 +48,9 @@ void Camera::constrict_angles(){
 }
 
 void Camera::adjust(vec4 direction){
+	if(length(direction) == 0)
+		return;
+	
 	
 	theta_x = dTheta * direction.x;
 	theta_y = dTheta * -direction.y;
@@ -101,24 +104,26 @@ void Camera::adjust(vec4 direction){
 
 /* Walk and Turn ::updates the view:: */
 void Camera::walk(vec4 direction){
+	if(length(direction) == 0)
+		return;
 
 	//cout << -normalize(eye - at) << " " << normalize(up) << " " << normalize(vec4(-cross(normalize(eye - at), up), 0)) << endl;
 	mat4 M = mat4(normalize(vec4(-cross(normalize(eye - at), up), 0)), normalize(up), normalize(eye - at), vec4(0,0,0,0) );
 	mat4 CameraToStandardBasis_M = transpose(M);
 
-cout << "TRANSPOSE: " << CameraToStandardBasis_M << endl;
-cout << "BEFORE: " <<  direction << endl;
+// cout << "TRANSPOSE: " << CameraToStandardBasis_M << endl;
+// cout << "BEFORE: " <<  direction << endl;
 
 	direction = CameraToStandardBasis_M * direction;
-	direction = normalize(direction);
+	//direction = normalize(direction);
 	direction = direction*dy;
 
-cout << "AFTER: " <<  direction << endl;
+// cout << "AFTER: " <<  direction << endl;
 
 
 	eye += direction;
 	at += direction;
-	cout << at << endl;
+// cout << "AT POINT: " << at << endl;
 	
 	update_view();
 }

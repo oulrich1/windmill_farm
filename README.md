@@ -28,14 +28,17 @@ Controls:
     o/O   :   Rotates about the Y-Axis in only one direction CW
     p/P   :   Star/Stop the windmill 
 
-    Camera Controls:
+    Plane Controls:
+    t:  Throttle UP
+    T:  Throttle Down
+
     w:  Move Forward
     a:  Move Backward
     s:  Strafe Left
     d:  Strafe Right
 
-    x:  Thrust Up (Strafe Up)
-    z:  Thrust Down (Strafe Down)
+    x:  Thrust Y-axis Up (Strafe Up)
+    z:  Thrust Y-axis Down (Strafe Down)
 
     q:  Yaw Left
     e:  Yaw Right
