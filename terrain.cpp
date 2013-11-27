@@ -126,7 +126,7 @@ float Terrain::generateCompletelyRandomHeight (float interval_width){
 uint Terrain::generateRandomTerrain(float MAX_X, float MAX_Y, float MAX_Z){
     terrain_data.clear();
     terrain_data.resize(MAX_X);     // MAX_X number of elements height 0
-    //srand(time(NULL));
+    srand(time(NULL));
     for (VVF::iterator iter = terrain_data.begin(); iter != terrain_data.end(); ++iter) {
         float randomHeight = generateCompletelyRandomHeight(MAX_Z);
         (*iter).resize(MAX_Y, randomHeight);

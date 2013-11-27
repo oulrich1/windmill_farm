@@ -6,8 +6,8 @@
 #define PLANE_H 
 
 #define INCR_THROTTLE_FACTOR 1.51235 //RANDOM!
-#define THROTTLE_MAX 123
-#define MAX_SPEED    10
+#define THROTTLE_MAX 200
+#define MAX_SPEED    100
 
 
 class Plane

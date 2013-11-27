@@ -15,6 +15,9 @@ To Compile and Run:
 
 Dependancies:
 ------------------------------------------
+    
+    g++-4.7 -std=c++0x
+    
     -lglut -lGLEW -lGL -lGLU -lm 
     (as usual)
 
@@ -58,6 +61,7 @@ Code:
     (Overview of file/design heirarchy)
     Main.cpp -> Game -> Windmill -> Geometry -> Angel.h
                      -> Camera
+                     -> Terrain
 
 
 Challenges:
