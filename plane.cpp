@@ -52,13 +52,15 @@ bool Plane::setThrottle(float throttle){
 	return false;
 }
 
-bool Plane::controlStick(){
+bool Plane::controlStick(vec4 dir){
 	// set parameters
 	// with parameters set:
 	//   control the camera:
 
+
 	if(delegated_camera_control){
 		// do camera stuff here...
+		cam ->walk(vec4(0,0,-1,0));
 	}
 	return true;
 }

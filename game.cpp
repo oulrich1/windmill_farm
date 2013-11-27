@@ -191,19 +191,21 @@ void Game::keyboard(unsigned char key, int x, int y) {
         }
         break;
     }
+
     /* plane controls: set throttle.. */
-    // case 'T': {
-    //     plane->increaseThrottle();
-    //     break;
-    // }
-    // case 't': {
-    //     plane->decreaseThrottle();
-    //     break;
-    // }
+    case 'T': {
+        plane->increaseThrottle();
+        break;
+    }
+    case 't': {
+        plane->decreaseThrottle();
+        break;
+    }
 
     /* plane controls: forward */
     case 'w': {
         cam->walk(vec4(0,0,-1,0));
+        //plane->controlStick(vec4(0,0,-1,0));
         break;
     }
     case 'a': {

@@ -25,7 +25,7 @@ public:
 	float 	getThrottle();
 
 
-	bool 	controlStick();
+	bool 	controlStick(vec4); // control the stick in certain direction...
 
 	/* - - - - data  - - - - */
 

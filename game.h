@@ -45,6 +45,7 @@ private:
         WindowHandle;
 
     Camera* cam;             // the camera description object
+    Plane* plane;
 
     Geometry**  game_objects;
     std::vector<Geometry*>   windmills;
