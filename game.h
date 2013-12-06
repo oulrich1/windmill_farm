@@ -48,6 +48,15 @@ private:
     
 
     char PREV_KEY;
+
+    bool W_IS_PRESSED; // pitch down
+    bool A_IS_PRESSED; // roll left
+    bool S_IS_PRESSED;
+    bool D_IS_PRESSED;
+
+    bool Q_IS_PRESSED;  //yaw left
+    bool E_IS_PRESSED; 
+
     int currentMouseX;
     int currentMouseY;
 
@@ -64,6 +73,10 @@ private:
     static void resizeWrapper(int, int);
     static void keyboardWrapper(unsigned char, int, int);
     static void specialKeysWrapper(int, int, int);
+
+    static void keyboardUpWrapper(unsigned char key,int x, int y);
+    static void specialKeysUpWrapper(int, int, int );
+
     static void timerFuncWrapper(int);
     static void idleFuncWrapper(void);
     static void closeCleanupWrapper(void);
@@ -99,6 +112,9 @@ private:
     void resize(int, int);
     void keyboard(unsigned char, int, int);
     void specialKeys(int, int, int );
+    void keyboardUp(unsigned char key,int x, int y);
+    void specialKeysUp(int, int, int );
+
     void timerFunc(int);
     void idleFunc(void);
     void closeCleanup(void);

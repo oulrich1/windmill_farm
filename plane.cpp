@@ -11,25 +11,52 @@ Plane::Plane(Camera* _cam){
 
     cam = _cam;
     delegated_camera_control = (cam ? true: false); 
+
+    current_control_state = 0; // the state mask that is used to control the orientation of the camera..
     
     cam_frozen      = false;
     plane_frozen    = false;
 
     drag_factor     = 0.034123; // random
-    mass            = 42;       // TODO:
+    ROTATE_FACTOR   = 0.03f;
 
 }
 Plane::~Plane(){
 
 }
 
+/* simulates the flying.. */
 bool Plane::fly(){
+
+    if(current_control_state & YAW_LEFT) {
+        controlStick(vec4(0,-ROTATE_FACTOR,0,0));
+    }
+
+   if(current_control_state & YAW_RIGHT) {
+        controlStick(vec4(0,ROTATE_FACTOR,0,0));
+    }
+
+    if(current_control_state & ROLL_LEFT) {
+        controlStick(vec4(0,0,-ROTATE_FACTOR, 0));
+    }
+    if(current_control_state & ROLL_RIGHT) {
+        controlStick(vec4(0,0,ROTATE_FACTOR, 0));
+    }
+    if(current_control_state & PITCH_DOWN) {
+        controlStick(vec4(-ROTATE_FACTOR,0,0, 0));
+    }
+   if(current_control_state & PITCH_UP) {
+        controlStick(vec4(ROTATE_FACTOR,0,0, 0));
+    }
+
+    
     if (plane_frozen == false) {
         if (delegated_camera_control){
-            cam->walk(vec4(0,0,-((float)cur_throttle/max_throttle) * MAX_SPEED, 0));
+            cam->walk(vec4(0,0,-((float)cur_throttle/max_throttle) * MAX_SPEED, 0) + this->direction );
             cam->adjust(thetas);
         }
-        thetas -=  thetas * drag_factor; // drag the change in angle..
+        this->thetas -=  this->thetas * drag_factor; // drag the change in angle..
+        this->direction -= this->direction * drag_factor;
         return true;
     }
     return false;
@@ -100,35 +127,27 @@ bool Plane::setThrottle(float throttle){
 }
 
 
+void Plane::setControlState(int state){
+    current_control_state = state;
+}
+
 /* STRAFE:  FORWARD(w), BACKWARDS(s), 
             LEFT(a), RIGHT(d), 
             UP(x), DOWN(z),         */
 bool Plane::controlDirection(vec4 dir){
-    // set parameters
-    // with parameters set:
-    //   control the camera:
-    //cout << "dir      : " << dir << endl;
 
     direction = dir;
-    //direction = normalize(direction);
 
     if(delegated_camera_control){
-        // do camera stuff here...
-        cam->walk(this->direction);
+        //  cam->walk(this->direction);
     }
     return true;
 }
 
 /* ROLL, PITCH, YAW */
 bool Plane::controlStick(vec4 angle_dir){
-    // set parameters
-    // with parameters set:
-    //   control the camera:
-    //cout << "angle_dir: " << angle_dir << endl;
 
     thetas += angle_dir;
-    //thetas = normalize(thetas);
-
 
     return true;
 }

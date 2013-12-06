@@ -16,6 +16,13 @@ Game::Game() {
 
 Game::Game(int* argcp, char** argv) {
     PREV_KEY = ' '; //keeps track of the key pressed 
+    W_IS_PRESSED = false;
+    A_IS_PRESSED = false;
+    S_IS_PRESSED = false;
+    D_IS_PRESSED = false;
+
+    Q_IS_PRESSED = false;
+    E_IS_PRESSED = false;
 
     printf("Creating instance of game\n"); 
 
@@ -146,6 +153,7 @@ void Game::resizeWrapper(int width, int height) {
 
 
 
+
 void Game::keyboard(unsigned char key, int x, int y) {
       // keyboard code here...
 
@@ -210,18 +218,22 @@ void Game::keyboard(unsigned char key, int x, int y) {
     case 'w': {
         //cam->walk(vec4(0,0,-1,0));
         plane->controlDirection(vec4(0,0,-1,0));
+        W_IS_PRESSED = true;
         break;
     }
     case 'a': {
         plane->controlDirection(vec4(-1,0,0,0));
+        A_IS_PRESSED = true;
         break;
     }
     case 's': {
        plane->controlDirection(vec4(0,0,1,0));
+       S_IS_PRESSED = true;
         break;
     }
     case 'd': {
        plane->controlDirection(vec4(1,0,0,0));
+       D_IS_PRESSED = true;
         break;
     }
 
@@ -237,11 +249,13 @@ void Game::keyboard(unsigned char key, int x, int y) {
 
     /* plane controls: YAW  */
     case 'q': {
-        plane->controlStick(vec4(0,-M_PI/32,0,0));
+        plane->setControlState(Plane::YAW_LEFT);
+        Q_IS_PRESSED = true;
         break;
     }
     case 'e': {
-        plane->controlStick(vec4(0,M_PI/32,0,0));
+        plane->setControlState(Plane::YAW_RIGHT);
+        E_IS_PRESSED = true;
         break;
     }
     case '[': {  // reset values to their defaults
@@ -267,25 +281,25 @@ void Game::specialKeys(int key, int x, int y) {
       // keyboard code here...
 
     switch( key ) {
-        /* plane controls : ROLL and PITCH */
+
         case GLUT_KEY_LEFT: {
-            plane->controlStick(vec4(0,0,-M_PI/32, 0));
-            //cam->walk(vec4(-1,0,0,0));
+            plane->setControlState(Plane::ROLL_LEFT);
+            W_IS_PRESSED = true;
             break;
         }
         case GLUT_KEY_RIGHT: {
-            plane->controlStick(vec4(0,0,M_PI/32, 0));
-            //cam->walk(vec4(1,0,0,0));
+            plane->setControlState(Plane::ROLL_RIGHT);
+            A_IS_PRESSED = true;
             break;
         }
         case GLUT_KEY_UP: {
-            //cam->walk(vec4(0,0,0,0));
-            plane->controlStick(vec4(-M_PI/32,0,0, 0));
+            plane->setControlState(Plane::PITCH_DOWN);
+            S_IS_PRESSED = true;
             break;
         }
         case GLUT_KEY_DOWN: {
-            //cam->walk(vec4(0,0,0,0));
-            plane->controlStick(vec4(M_PI/32,0,0, 0));
+            plane->setControlState(Plane::PITCH_UP);
+            D_IS_PRESSED = true; 
             break;
         }
 
@@ -296,6 +310,83 @@ void Game::specialKeys(int key, int x, int y) {
 void Game::specialKeysWrapper(int keycode, int x, int y){
     callbackInstance->specialKeys(keycode, x, y);
 }
+
+
+
+void Game::keyboardUp(unsigned char key, int x, int y){
+    switch( key ) {
+        /* plane controls : ROLL and PITCH */
+        case 'w': {
+            plane->setControlState(0);
+            W_IS_PRESSED = false;
+            break;
+        }
+        case 'a': {
+            plane->setControlState(0);
+            A_IS_PRESSED = false;
+            break;
+        }
+        case 's': {
+            plane->setControlState(0);
+            S_IS_PRESSED = false;
+            break;
+        }
+        case 'd': {
+            plane->setControlState(0);
+            D_IS_PRESSED = false;
+            break;
+        } 
+
+        case 'q':{
+            plane->setControlState(0);
+            Q_IS_PRESSED = false;
+            break;
+        }
+        case 'e':{
+            plane->setControlState(0);
+            E_IS_PRESSED = false;
+        }
+
+    }
+}
+
+void Game::keyboardUpWrapper(unsigned char key,int x, int y){
+    callbackInstance->keyboardUp(key, x, y);
+}
+
+
+
+void Game::specialKeysUp(int key, int x, int y){
+    switch( key ) {
+        /* plane controls : ROLL and PITCH */
+        case GLUT_KEY_LEFT: {
+            plane->setControlState(0);
+            W_IS_PRESSED = false;
+            break;
+        }
+        case GLUT_KEY_RIGHT: {
+            plane->setControlState(0);
+            A_IS_PRESSED = false;
+            break;
+        }
+        case GLUT_KEY_UP: {
+            plane->setControlState(0);
+            S_IS_PRESSED = false;
+            break;
+        }
+        case GLUT_KEY_DOWN: {
+            plane->setControlState(0);
+            D_IS_PRESSED = false; 
+            break;
+        }
+
+    }
+}
+
+void Game::specialKeysUpWrapper(int key, int x, int y){
+    callbackInstance->specialKeysUp(key, x, y);
+}
+
 
 
 
@@ -457,6 +548,8 @@ void Game::initGame() {
 /* -------------------------------------------------  */
 
 
+// void glutKeyboardUpFunc(void (*func)(unsigned char key,int x,int y)); 
+// void glutSpecialUpFunc(void (*func)(int key,int x, int y)); 
 
 /* regeisters the glut callbacks.. */
 void Game::registerCallbacks() {
@@ -464,6 +557,9 @@ void Game::registerCallbacks() {
     glutReshapeFunc(resizeWrapper);         // inits the window when window is modified
     glutKeyboardFunc(keyboardWrapper);      // keyboard callback
     glutSpecialFunc(specialKeysWrapper);
+
+    glutKeyboardUpFunc(keyboardUpWrapper);
+    glutSpecialUpFunc(specialKeysUpWrapper);
 
     glutMouseFunc(mouseWrapper);
     glutPassiveMotionFunc(mouseMotionFuncWrapper);

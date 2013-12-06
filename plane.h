@@ -16,6 +16,18 @@ public:
     Plane(Camera* _cam = NULL);
     ~Plane();
 
+    // control masks:
+    static const int YAW_LEFT = 0x0001;
+    static const int YAW_RIGHT = 0x0002;
+    static const int ROLL_LEFT = 0x0004;
+    static const int ROLL_RIGHT = 0x0008;
+    static const int PITCH_DOWN = 0x0010;
+    static const int PITCH_UP = 0x0020;
+
+    float ROTATE_FACTOR;
+
+    int     current_control_state;
+
     bool    fly();
     bool    pause();
     bool    unpause();
@@ -28,6 +40,7 @@ public:
     bool    setThrottle(float throttle);
     float   getThrottle();
 
+    void    setControlState(int state);
 
     bool    controlStick(vec4);
     bool    controlDirection(vec4); // control the stick in certain direction...
