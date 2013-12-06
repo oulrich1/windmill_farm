@@ -25,6 +25,7 @@ Plane::~Plane(){
 
 }
 
+
 /* simulates the flying.. */
 bool Plane::fly(){
 
