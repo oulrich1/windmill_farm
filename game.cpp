@@ -338,12 +338,12 @@ void Game::keyboardUp(unsigned char key, int x, int y){
         } 
 
         case 'q':{
-            plane->setControlState(0);
+            plane->unsetControlState(Plane::YAW_LEFT);
             Q_IS_PRESSED = false;
             break;
         }
         case 'e':{
-            plane->setControlState(0);
+            plane->unsetControlState(Plane::YAW_RIGHT);
             E_IS_PRESSED = false;
         }
 
@@ -360,22 +360,22 @@ void Game::specialKeysUp(int key, int x, int y){
     switch( key ) {
         /* plane controls : ROLL and PITCH */
         case GLUT_KEY_LEFT: {
-            plane->setControlState(0);
+            plane->unsetControlState(Plane::ROLL_LEFT);
             W_IS_PRESSED = false;
             break;
         }
         case GLUT_KEY_RIGHT: {
-            plane->setControlState(0);
+            plane->unsetControlState(Plane::ROLL_RIGHT);
             A_IS_PRESSED = false;
             break;
         }
         case GLUT_KEY_UP: {
-            plane->setControlState(0);
+            plane->unsetControlState(Plane::PITCH_DOWN);
             S_IS_PRESSED = false;
             break;
         }
         case GLUT_KEY_DOWN: {
-            plane->setControlState(0);
+            plane->unsetControlState(Plane::PITCH_UP);
             D_IS_PRESSED = false; 
             break;
         }

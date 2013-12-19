@@ -41,6 +41,7 @@ public:
     float   getThrottle();
 
     void    setControlState(int state);
+    void    unsetControlState(int state);
 
     bool    controlStick(vec4);
     bool    controlDirection(vec4); // control the stick in certain direction...

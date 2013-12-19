@@ -12,21 +12,25 @@ typedef Angel::vec4  point4;
 #ifndef CAMERA_H
 #define CAMERA_H 
 
-#define quaternion glm::gtx::quaternion
 
 class Camera
 {
 private:
     void constrict_angles();
+
+
+
 public:
     Camera(GLuint program_id);
     ~Camera();
 
-    void set_at(vec4 _at);
-    void set_up(vec4 _up);
 
-    void update_proj(); // given the camera properties, send a new matrix to the graphics card
-    void update_view();
+    void        set_at(vec4 _at);
+    void        set_up(vec4 _up);
+
+    void        update_proj(); // given the camera properties, send a new matrix to the graphics card
+    void        update_view();
+    
 
     GLuint      projection_loc, 
                 view_loc;
@@ -68,6 +72,11 @@ public:
     void offsetOrientation(vec2 direction);
     // turn rate:
     float dTheta = 4.5, dPhi = 0.5;
+
+    // might or might not need 
+    // to be accessed publicly
+
+
 };
 
 #endif

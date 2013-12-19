@@ -129,8 +129,13 @@ bool Plane::setThrottle(float throttle){
 
 
 void Plane::setControlState(int state){
-    current_control_state = state;
+    current_control_state |= state;     // set the state
 }
+
+void Plane::unsetControlState(int state){
+    current_control_state &= (~state);  // clear the state
+}
+
 
 /* STRAFE:  FORWARD(w), BACKWARDS(s), 
             LEFT(a), RIGHT(d), 
