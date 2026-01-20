@@ -216,8 +216,8 @@ void Game::keyboard(unsigned char key, int x, int y) {
 
     /* plane controls: forward,backward, strafe: sides: left,right */
     case 'w': {
-        //cam->walk(vec4(0,0,-1,0));
-        plane->controlDirection(vec4(0,0,-1,0));
+        // speed up (plane always moves forward at a base throttle)
+        plane->increaseThrottle();
         W_IS_PRESSED = true;
         break;
     }
@@ -227,7 +227,8 @@ void Game::keyboard(unsigned char key, int x, int y) {
         break;
     }
     case 's': {
-       plane->controlDirection(vec4(0,0,1,0));
+       // slow down (but keep moving; Plane has a non-zero min_throttle)
+       plane->decreaseThrottle();
        S_IS_PRESSED = true;
         break;
     }
@@ -317,7 +318,6 @@ void Game::keyboardUp(unsigned char key, int x, int y){
     switch( key ) {
         /* plane controls : ROLL and PITCH */
         case 'w': {
-            plane->setControlState(0);
             W_IS_PRESSED = false;
             break;
         }
@@ -327,7 +327,6 @@ void Game::keyboardUp(unsigned char key, int x, int y){
             break;
         }
         case 's': {
-            plane->setControlState(0);
             S_IS_PRESSED = false;
             break;
         }

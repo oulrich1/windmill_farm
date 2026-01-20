@@ -7,6 +7,7 @@
 
 #define INCR_THROTTLE_FACTOR 1.51235 //RANDOM!
 #define THROTTLE_MAX 200
+#define THROTTLE_BASE 40  // minimum "always moving" throttle (keeps plane moving forward)
 #define MAX_SPEED    100
 
 
@@ -58,6 +59,7 @@ public:
 
     float   cur_throttle = 0;
 
+    // Prevents the plane from ever fully stopping (unless you change this).
     float   min_throttle = 0; 
 
     vec4    thetas;

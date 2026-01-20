@@ -3,8 +3,8 @@
 
 Plane::Plane(Camera* _cam){
     max_throttle    = THROTTLE_MAX;
-    cur_throttle    = 0;
-    min_throttle    = 0;
+    min_throttle    = THROTTLE_BASE;
+    cur_throttle    = min_throttle;
 
     thetas          = vec4(0,0,0,0);
     direction       = vec4(0,0,0,0);
